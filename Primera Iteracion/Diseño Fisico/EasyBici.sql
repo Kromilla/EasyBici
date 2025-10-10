@@ -102,3 +102,4 @@ CREATE TABLE Punto_De_Alquiler (
     FOREIGN KEY (id_ciudad) REFERENCES Ciudad(id)
 );
 
+
