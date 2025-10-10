@@ -1,63 +1,106 @@
 -- Tabla Modelo
 CREATE TABLE Modelo (
-    id_modelo INT PRIMARY KEY,
-    nombre VARCHAR(100),
-    año VARCHAR(4),
-    id_Marca INT
+    id INT PRIMARY KEY IDENTITY(1,1),
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    aÃ±o VARCHAR(100),
+    id_marca INT NOT NULL,
+    FOREIGN KEY (id_marca) REFERENCES Marca(id)
 );
 
 -- Tabla Bicicleta
 CREATE TABLE Bicicleta (
-    id INT PRIMARY KEY,
-    estado VARCHAR(20),
-    tamaño_Marco VARCHAR(20),
-    id_Asistencia INT,
-    id_Tipo_Bicicleta INT,
-    id_Punto_Alquiler INT,
-    id_modelo INT,
-
+    id INT PRIMARY KEY IDENTITY(1,1),
+    estado VARCHAR(100),
+    tamaÃ±o_marco VARCHAR(100),
+    id_modelo INT NOT NULL,
+    id_punto_alquiler INT NOT NULL,
+    id_tipo_bicicleta INT NOT NULL,
+    id_asistencia INT NOT NULL,
+    FOREIGN KEY (id_modelo) REFERENCES Modelo(id),
+    FOREIGN KEY (id_punto_alquiler) REFERENCES Punto_De_Alquiler(id),
+    FOREIGN KEY (id_tipo_bicicleta) REFERENCES Tipo_De_Bicicleta(id_tipo_bicicleta),
+    FOREIGN KEY (id_asistencia) REFERENCES Asistencia(id)
 );
 
 -- Tabla Tipo De Bicicleta
- CREATE TABLE Tipo_De_Bicicleta(
-    Id_Tipo_Bicicleta INT PRIMARY KEY,
-    Nombre VARCHAR (100),
-    );
+    CREATE TABLE Tipo_De_Bicicleta (
+    id_tipo_bicicleta INT PRIMARY KEY IDENTITY(1,1),
+    nombre VARCHAR(100) UNIQUE NOT NULL
+);
 
 -- Tabla Asistencia
-  CREATE TABLE Asistencia(
-  Id_Asistencia INT PRIMARY KEY,
-  Nombre VARCHAR (100),
-  );
+  CREATE TABLE Asistencia (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    nombre VARCHAR(100) UNIQUE NOT NULL
+);
 
 -- Tabla Marca
-  CREATE TABLE Marca(
-  Id_Marca INT PRIMARY KEY, 
-  Nombre VARCHAR (100),
-  Pais_Origen VARCHAR(100),
-  Sitio_web VARCHAR (100),
-  );
+  CREATE TABLE Marca (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    pais_origen VARCHAR(100),
+    sitio_web VARCHAR(100) UNIQUE
+);
+
+-- Tabla Bicicletas Facturadas
+CREATE TABLE Bicicletas_Facturadas (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    id_bicicleta INT NOT NULL,
+    id_factura INT NOT NULL,
+    FOREIGN KEY (id_bicicleta) REFERENCES Bicicleta(id),
+    FOREIGN KEY (id_factura) REFERENCES Factura(id)
+);
+
+-- Tabla Factura 
+   CREATE TABLE Factura (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    fecha_alquiler DATETIME,
+    fecha_entrega DATETIME,
+    id_metodo_pago INT NOT NULL,
+    FOREIGN KEY (id_metodo_pago) REFERENCES Metodo_Pago(id)
+);
+
+-- Tabla Metodo De Pago
+ CREATE TABLE Metodo_Pago (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    descripcion VARCHAR(100) NULL
+);
+
+-- Tabla Plan Alquiler
+CREATE TABLE Plan_Alquiler (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    condiciones_especiales VARCHAR(100),
+    estado VARCHAR(100),
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    fecha_inicio_vigencia DATETIME,
+    fecha_fin_vigencia DATETIME,
+    duracion VARCHAR(100),
+    decripcion VARCHAR(100) NULL
+);
 
 
--- Bicicletas Facturadas
-  CREATE TABLE Bicicletas_Facturadas (
-  Id Int,
-  Id_Bicicleta Int,
-  Id_Factura int, 
-  );
+-- Tabla Tarifa 
+CREATE TABLE Tarifa (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    id_tipo_bicicleta INT NOT NULL,
+    id_plan INT NOT NULL,
+    valor FLOAT,
+    FOREIGN KEY (id_tipo_bicicleta) REFERENCES Tipo_De_Bicicleta(id_tipo_bicicleta),
+    FOREIGN KEY (id_plan) REFERENCES Plan_Alquiler(id)
+);
 
--- Factura 
-   CREATE TABLE Factura(
-   Id_Factura INT PRIMARY KEY,
-   Fecha_Alquiler DATETIME,
-   Fecha_Entrega DATETIME,
-   Id_Metodo_Pago Int,
-   );
--- Metodo De Pago
-   Id_Metodo_Pago INT PRIMARY KEY,
-   Nombre VARCHAR,
-   Descripcion VARCHAR,
-   );
+-- Tabla Punto De Alquiler
+CREATE TABLE Punto_De_Alquiler (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    nombre VARCHAR(100) UNIQUE NOT NULL,
+    correo VARCHAR(100) UNIQUE NOT NULL,
+    capacidad INT,
+    direccion VARCHAR(100) UNIQUE,
+    horario VARCHAR(100),
+    id_ciudad INT NOT NULL,
+    FOREIGN KEY (id_ciudad) REFERENCES Ciudad(id)
+);
 
 
 
