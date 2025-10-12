@@ -166,4 +166,8 @@ CREATE TABLE Departamentos (
     --Validaciones
     CONSTRAINT PK_Departamentos PRIMARY KEY (id_departamento),
     CONSTRAINT UQ_Departamentos_Nombre UNIQUE (nombre)
+<<<<<<< HEAD
 );
+=======
+);
+>>>>>>> c6d0d203e7f0f5d4c1c75260168bcd252c156c63
