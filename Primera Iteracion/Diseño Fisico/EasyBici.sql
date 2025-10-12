@@ -147,7 +147,7 @@ CREATE TABLE Puntos_De_Alquiler (
     CONSTRAINT UQ_Puntos_Alquiler_direccion UNIQUE (direccion),
     CONSTRAINT FK_Puntos_Alquiler_Ciudades FOREIGN KEY (id_ciudad) REFERENCES Ciudades(id_ciudad)
 );
-
+-- Tabla Ciudad
 CREATE TABLE Ciudades (
     id_ciudad INT IDENTITY(1,1),
     nombre VARCHAR(100) NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE Ciudades (
     CONSTRAINT UQ_Ciudades_Nombre UNIQUE (nombre),
     CONSTRAINT FK_Ciudades_Departamentos FOREIGN KEY (id_departamento) REFERENCES Departamentos(id_departamento)
 );
-
+-- Tabla Departamento
 CREATE TABLE Departamentos (
     id_departamento INT IDENTITY(1,1),
     nombre VARCHAR(100) NOT NULL,
