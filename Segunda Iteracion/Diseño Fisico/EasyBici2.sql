@@ -1,3 +1,4 @@
+
 -- Tabla Modelo
 
 CREATE TABLE Modelos (
@@ -141,7 +142,7 @@ CREATE TABLE Departamentos (
     CONSTRAINT UQ_Departamentos_Nombre UNIQUE (nombre)
 );
 
--- Tabla Cuidad
+-- Tabla Ciudad
 CREATE TABLE Ciudades (
     id_ciudad INT IDENTITY(1,1),
     nombre VARCHAR(100) NOT NULL,
@@ -168,8 +169,8 @@ CREATE TABLE Puntos_De_Alquiler (
 
     -- Validaciones
     CONSTRAINT PK_Puntos_Alquiler PRIMARY KEY (id_punto_alquiler),
-    CONSTRAINT UQ_Puntos_Alquiler_nombre UNIQUE (nombre),
-    CONSTRAINT UQ_Puntos_Alquiler_direccion UNIQUE (direccion),
+    CONSTRAINT UQ_Puntos_Alquiler_Nombre UNIQUE (nombre),
+    CONSTRAINT UQ_Puntos_Alquiler_Direccion UNIQUE (direccion),
     CONSTRAINT FK_Puntos_Alquiler_Ciudades FOREIGN KEY (id_ciudad) REFERENCES Ciudades(id_ciudad),
     CONSTRAINT FK_Puntos_Alquiler_Horarios FOREIGN KEY (id_horario) REFERENCES Horarios_Punto_Alquiler(id_horario)
 );
@@ -178,23 +179,35 @@ CREATE TABLE Puntos_De_Alquiler (
 CREATE TABLE Estados (
     id_estado INT IDENTITY(1,1),
     nombre NVARCHAR(100) NOT NULL,
-    descripcion NVARCHAR(250) NULL
+    descripcion NVARCHAR(250) NULL,
+
+    --Validaciones
+    CONSTRAINT PK_Estados PRIMARY KEY (id_estado),
+    CONSTRAINT UQ_Estados_Nombre UNIQUE (nombre)
 );
 
 -- Tabla Horarios_Punto_Alquiler
 
 CREATE TABLE Horarios_Punto_Alquiler (
     id_horario INT IDENTITY(1,1),
-    dia_de_semana NVARCHAR(20) NOT NULL,
+    dia_de_semana INT NOT NULL,
     hora_inicio DATETIME NOT NULL,
-    hora_fin DATETIME NOT NULL
+    hora_fin DATETIME NOT NULL,
+
+    --Validaciones 
+    CONSTRAINT PK_Horarios_Punto_Alquiler PRIMARY KEY (id_horario)
+    
 );
 
 -- Tabla Tipos_Documentos_De_Identificacion
 CREATE TABLE Tipos_Documentos_De_Identificacion (
     id_tipo_documento INT IDENTITY(1,1),
     nombre NVARCHAR(100) NOT NULL,
-    descripcion NVARCHAR(100) NULL
+    descripcion NVARCHAR(100) NULL,
+
+    --Validaciones
+    CONSTRAINT PK_Tipos_Documentos_Identificacion PRIMARY KEY (id_tipo_documento),
+    CONSTRAINT UQ_Tipos_Documentos_Identificacion_Nombre UNIQUE (nombre)
 );
 
 
@@ -207,14 +220,23 @@ CREATE TABLE Personas (
     nit VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL,
     id_tipo_documento INT NOT NULL,
-    id_ciudad_nacimiento INT NOT NULL
+    id_ciudad_nacimiento INT NOT NULL,
+
+    --Validaciones
+    CONSTRAINT PK_Personas PRIMARY KEY (id_persona),
+    CONSTRAINT FK_Personas_Tipos_Documentos FOREIGN KEY (id_tipo_documento) REFERENCES Tipos_Documentos_De_Identificacion(id_tipo_documento),
+    CONSTRAINT FK_Personas_Ciudades FOREIGN KEY (id_ciudad_nacimiento) REFERENCES Ciudades(id_ciudad)
 );
 
 -- Tabla Cargos
 CREATE TABLE Cargos (
     id_cargo INT IDENTITY(1,1),
     nombre VARCHAR(100) NOT NULL,
-    descripcion VARCHAR(250) NULL
+    descripcion VARCHAR(250) NULL,
+
+    --Validaciones 
+    CONSTRAINT PK_Cargos PRIMARY KEY (id_cargo),
+    CONSTRAINT UQ_Cargos_Nombre UNIQUE (nombre)
 );
 
 
@@ -222,7 +244,12 @@ CREATE TABLE Cargos (
 CREATE TABLE Trabajadores (
     id_trabajador INT IDENTITY(1,1),
     id_cargo INT NOT NULL,
-    id_persona INT NOT NULL
+    id_persona INT NOT NULL,
+
+    --Validaciones 
+    CONSTRAINT PK_Trabajadores PRIMARY KEY (id_trabajador),
+    CONSTRAINT FK_Trabajadores_Cargos FOREIGN KEY (id_cargo) REFERENCES Cargos(id_cargo),
+    CONSTRAINT FK_Trabajadores_Personas FOREIGN KEY (id_persona) REFERENCES Personas(id_persona)
 );
 
 
@@ -234,12 +261,20 @@ CREATE TABLE Horarios_Empleados (
     hora_inicio DATETIME NOT NULL,
     dia_semana VARCHAR(10) NOT NULL,
     hora_fin DATETIME NOT NULL
+
+    --Validaciones
+    CONSTRAINT PK_Horarios PRIMARY KEY (id_horario_empleado),
+    CONSTRAINT FK_Horarios_Empleados FOREIGN KEY (id_trabajador) REFERENCES Trabajadores(id_trabajador)
 );
 
 -- Tabla Usuarios
 CREATE TABLE Usuarios (
     id_usuario INT IDENTITY(1,1),
     id_persona INT NOT NULL,
-    id_metodo_de_pago_preferido INT NULL
-);
+    id_metodo_pago_preferido INT NULL
 
+    --Validaciones
+    CONSTRAINT PK_Usuarios PRIMARY KEY (id_trabajador),
+    CONSTRAINT FK_Usuarios_Personas FOREIGN KEY (id_persona) REFERENCES Personas(id_persona),
+    CONSTRAINT FK_Usuarios_Metodos_Pago FOREIGN KEY (id_metodo_pago_preferido) REFERENCES Metodos_Pago(id_metodo_pago)
+);
